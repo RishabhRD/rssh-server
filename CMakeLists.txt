@@ -12,4 +12,4 @@ ${GCC_COVERAGE_LINK_FLAGS}")
 
 add_executable(rssh-server ${SOURCES})
 
-install(TARGETS vxlan-agent DESTINATION /usr/bin)
+install(TARGETS rssh-server DESTINATION /usr/bin)
