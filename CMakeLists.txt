@@ -1,15 +1,11 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.5)
 project(rssh-server)
 
 find_package(Threads REQUIRED)
+find_package(Catch2 REQUIRED)
 
 add_subdirectory(src)
-if(BUILD_TESTING)
-  include(CTest)
-  find_package(Catch2 REQUIRED)
-  find_package(Threads REQUIRED)
-  include(Catch)
-  add_subdirectory(tests)
-  catch_discover_tests(tests)
-endif()
+# if(BUILD_TESTING)
+add_subdirectory(tests)
+# endif()
 

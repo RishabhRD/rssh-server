@@ -1,8 +1,13 @@
 enable_testing()
-set(test_files "")
-add_executable(unit_test ${src_files} ${test_files})
+add_executable(unit_test
+  MainTest.cc
+  IDAllocatorTest.cc
+  ../src/IDAllocator.cc
+  ../src/IDUnavailableException.cc
+  )
 target_include_directories(unit_test PUBLIC ../include)
-target_link_libraries(unit_test PRIVATE Threads:Threads Catch2::Catch2)
+target_link_libraries(unit_test PRIVATE Threads::Threads Catch2::Catch2)
 target_compile_features(unit_test PUBLIC cxx_std_17)
-catch_discover_tests(tests)
-install(TARGETS rssh_server_unit_test RUNTIME DESTINATION bin)
+include(CTest)
+include(Catch)
+catch_discover_tests(unit_test)
