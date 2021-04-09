@@ -1,0 +1,6 @@
+file(test_files "")
+add_executable(unit_test ${src_files} ${test_files})
+target_include_directories(unit_test PUBLIC ../include)
+target_link_libraries(unit_test PRIVATE Threads:Threads Catch2::Catch2)
+target_compile_features(unit_test PUBLIC cxx_std_17)
+install(TARGETS rssh_server_unit_test RUNTIME DESTINATION bin)
