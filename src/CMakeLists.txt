@@ -1,4 +1,5 @@
 add_executable(rssh-server
+  NewMessage.cc
   DataMessage.cc
   Message.cc
   IDAllocator.cc

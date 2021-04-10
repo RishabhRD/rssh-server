@@ -1,6 +1,6 @@
 #include <exception>
 #include <string>
-class IDUnavailableException : std::exception {
+class IDUnavailableException : public std::exception {
   std::string message;
 
 public:
