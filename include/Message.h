@@ -7,6 +7,7 @@
 #include <vector>
 
 class Message {
+protected:
   std::uint32_t id;
   MessageType type;
   std::uint32_t length;

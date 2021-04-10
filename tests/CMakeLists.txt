@@ -1,5 +1,6 @@
 enable_testing()
 add_executable(unit_test
+  ../src/InvalidMessageCastException.cc
   CloseMessageTest.cc
   ../src/CloseMessage.cc
   NewMessageTest.cc
