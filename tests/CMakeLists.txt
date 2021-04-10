@@ -1,5 +1,7 @@
 enable_testing()
 add_executable(unit_test
+  CloseMessageTest.cc
+  ../src/CloseMessage.cc
   NewMessageTest.cc
   ../src/NewMessage.cc
   DataMessageTest.cc

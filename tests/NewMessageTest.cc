@@ -5,4 +5,5 @@
 tc("On initilization, NewMessage should have message type NEW"){
   NewMessage newMessage;
   req(newMessage.getType() == MessageType::NEW);
+  req(newMessage.getLength() == 0);
 }
