@@ -1,5 +1,8 @@
 enable_testing()
 add_executable(unit_test
+  MessageTest.cc
+  ../src/MessageParsingException.cc
+  Message.cc
   MainTest.cc
   IDAllocatorTest.cc
   ../src/IDAllocator.cc

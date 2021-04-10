@@ -1,6 +1,8 @@
 add_executable(rssh-server
+  Message.cc
   IDAllocator.cc
   IDUnavailableException.cc
+  MessageParsingException.cc
   main.cc
   )
 target_include_directories(rssh-server PUBLIC ../include)

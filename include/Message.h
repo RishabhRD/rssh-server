@@ -9,19 +9,16 @@ class Message {
   std::vector<std::byte> data;
 
 public:
-  Message();
-  MessageType getType();
-  void setType(MessageType type);
-  void setId(std::uint32_t id);
-  std::uint32_t getId();
-  template <template <typename, typename> class Container,
-            typename Allocator = std::allocator<std::byte>>
-  void fillData(Container<std::byte, Allocator>,
-                Container<std::byte, Allocator>);
-  std::uint32_t getLength();
-  std::vector<std::byte> serialize();
-  template <template <typename, typename> class Container,
-            typename Allocator = std::allocator<std::byte>>
-  static Message deserialize(Container<std::byte, Allocator>,
-                             Container<std::byte, Allocator>);
+  Message(MessageType type);
+  MessageType getType() const noexcept;
+  void setType(MessageType type) noexcept;
+  void setId(std::uint32_t id) noexcept;
+  std::uint32_t getId() const noexcept;
+  template<typename Iter>
+  void fillData(Iter begin, Iter end);
+  std::vector<std::byte> getData();
+  std::uint32_t getLength() noexcept;
+  std::vector<std::byte> serialize() const noexcept;
+  template<typename Iter>
+  static Message deserialize(Iter begin, Iter end);
 };
