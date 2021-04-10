@@ -1,5 +1,7 @@
 enable_testing()
 add_executable(unit_test
+  DataMessageTest.cc
+  ../src/DataMessage.cc
   MessageTest.cc
   ../src/MessageParsingException.cc
   ../src/Message.cc

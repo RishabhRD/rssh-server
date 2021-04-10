@@ -1,4 +1,5 @@
 add_executable(rssh-server
+  DataMessage.cc
   Message.cc
   IDAllocator.cc
   IDUnavailableException.cc
