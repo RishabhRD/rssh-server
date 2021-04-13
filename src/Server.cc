@@ -14,10 +14,10 @@ Server::Server(asio::io_context &context)
 
 tcp::socket &Server::getSocket() { return socket; }
 
-void Server::write(const Message &msg) const {
+void Server::write(const Message &msg) {
   auto data = msg.serialize();
   // TODO: decide if anything should be done on write
-  asio::async_write(socket, asio::buffer(data), [](auto c1, auto c2) {});
+  asio::async_write(socket, asio::buffer(data), [](auto error, auto size) {});
 }
 
 void Server::scheduleReadId() {
@@ -71,8 +71,8 @@ void Server::handleReadLength(std::error_code code, std::size_t readSize) {
 }
 
 void Server::scheduleReadData() {
-  asio::async_read(socket,
-      asio::buffer(readBuffer, length),
+  asio::async_read(
+      socket, asio::buffer(readBuffer, length),
       [this](auto error, auto size) { handleReadData(error, size); });
 }
 
@@ -89,8 +89,7 @@ void Server::handleReadData(std::error_code code, std::size_t readSize) {
 }
 
 void Server::sendMessageToClient(const Message &msg) {
-  auto &db = ClientDatabase::getDefault();
-  std::shared_ptr<Client> client = db.getClientFromId(msg.getId()).lock();
+  std::shared_ptr<Client> client = clientDB.getClientFromId(msg.getId()).lock();
   client->write(msg);
 }
 
@@ -99,14 +98,14 @@ void Server::handleConenctionClose() { socket.close(); }
 void Server::scheduleRead() { scheduleReadId(); }
 
 void Server::registerClient(std::uint32_t id, std::weak_ptr<Client> client) {
-  ClientDatabase::getDefault().registerClient(id, client);
+  clientDB.registerClient(id, client);
   NewMessage clientAddedMessage;
   clientAddedMessage.setId(id);
   write(clientAddedMessage);
 }
 
 void Server::removeClient(std::uint32_t id) {
-  ClientDatabase::getDefault().removeClient(id);
+  clientDB.removeClient(id);
   CloseMessage clientCloseMessage;
   clientCloseMessage.setId(id);
   write(clientCloseMessage);

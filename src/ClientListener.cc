@@ -15,7 +15,7 @@ void ClientListener::startListening() {
   Client::ptr newClient = Client::create(context, server, id, allocator);
   acceptor.async_accept(newClient->getSocket(),
                         [this, newClient, id](auto error) {
-                          onNewClientConnection(newClient, error);
+                          onNewClientAdded(newClient, error);
                         });
 }
 

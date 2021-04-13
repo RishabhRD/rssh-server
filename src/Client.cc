@@ -10,7 +10,7 @@ Client::ptr Client::create(asio::io_context &context, Server::ptr server,
   return ptr(new Client(context, server, id, allocaotor));
 }
 
-void Client::write(const Message &msg) const {
+void Client::write(const Message &msg) {
   auto data = msg.getData();
   asio::async_write(socket, asio::buffer(data), [](auto c1, auto c2) {});
 }

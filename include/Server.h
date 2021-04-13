@@ -21,7 +21,7 @@ public:
   static ptr create(asio::io_context &context);
   tcp::socket &getSocket();
   void scheduleRead();
-  void write(const Message &msg) const;
+  void write(const Message &msg) ;
   void registerClient(std::uint32_t id, std::weak_ptr<Client>);
   void removeClient(std::uint32_t id);
 

@@ -19,7 +19,7 @@ public:
   tcp::socket &getSocket() noexcept;
   std::uint32_t getId() const noexcept;
   void scheduleRead();
-  void write(const Message& msg) const;
+  void write(const Message& msg);
 private:
   Client(asio::io_context& context, Server::ptr server, int id, IDAllocator& allocator);
   void handleRead(std::error_code error, std::size_t readSize);
