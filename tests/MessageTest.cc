@@ -108,7 +108,7 @@ tc("Should throw exception on deserializing bad formatted message") {
   sec("Deserializing when message has bad type") {
     std::byte raw[12];
     std::uint32_t id = 2;
-    std::uint8_t type = 3;
+    std::uint8_t type = 4;
     std::uint32_t length = 3;
     std::size_t current = 0;
     std::memcpy((raw + current), &id, sizeof(std::uint32_t));

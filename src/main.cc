@@ -1,6 +1,8 @@
 #include <iostream>
-#include <IDAllocator.h>
-#include <CloseMessage.h>
+#include "ServerListener.h"
 int main() {
-  Message msg(MessageType::CLOSE);
+  asio::io_context context;
+  ServerListener listener(context, 22222);
+  listener.startListening();
+  context.run();
 }
