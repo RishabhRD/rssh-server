@@ -72,6 +72,7 @@ void Server::handleReadLength(std::error_code code, std::size_t readSize) {
 }
 
 void Server::scheduleReadData() {
+  //TODO: read some should not be used because data size is known
   socket.async_read_some(
       asio::buffer(readBuffer),
       [this](auto error, auto size) { handleReadData(error, size); });

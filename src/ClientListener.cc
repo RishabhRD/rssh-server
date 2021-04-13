@@ -23,7 +23,7 @@ void ClientListener::onNewClientAdded(Client::ptr newClient,
                                       const std::error_code &error) {
   if (!error) {
     server->registerClient(newClient->getId(), newClient);
-    newClient->start();
+    newClient->scheduleRead();
   }
   startListening();
 }
