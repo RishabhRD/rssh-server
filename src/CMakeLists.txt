@@ -1,4 +1,8 @@
 add_executable(rssh-server
+  Server.cc
+  ServerListener.cc
+  Client.cc
+  ClientListener.cc
   InvalidMessageCastException.cc
   CloseMessage.cc
   NewMessage.cc

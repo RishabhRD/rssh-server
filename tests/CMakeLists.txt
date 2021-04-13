@@ -1,5 +1,10 @@
 enable_testing()
 add_executable(unit_test
+  ClientDatabaseTest.cc
+  ../src/Server.cc
+  ../src/ServerListener.cc
+  ../src/Client.cc
+  ../src/ClientListener.cc
   ../src/InvalidMessageCastException.cc
   CloseMessageTest.cc
   ../src/CloseMessage.cc
