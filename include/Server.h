@@ -20,7 +20,8 @@ public:
   tcp::socket &getSocket();
   void scheduleRead();
   void write(const Message &msg) const;
-  void registerClient(std::uint32_t id, std::weak_ptr<Client>);
+  void registerClient(std::uint32_t id, std::weak_ptr<Client>,
+                      std::uint32_t port);
   void removeClient(std::uint32_t id);
 
 private:

@@ -1,5 +1,5 @@
 #include "ServerListener.h"
-#include "ClienListener.h"
+#include "ClientListener.h"
 
 ServerListener::ServerListener(asio::io_context &context, int port)
     : context(context), acceptor(context, tcp::endpoint(tcp::v4(), port)) {}
@@ -21,7 +21,7 @@ void ServerListener::onNewServerConnection(Server::ptr newServer,
   if (!error) {
     newServer->scheduleRead();
     auto newClientListener = ClientListener::create(
-        context, newServer->shared_from_this(), IDAllocator::getDefault());
+        context, newServer->shared_from_this());
     newClientListener->startListening();
   }
   startListening();

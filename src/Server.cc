@@ -1,9 +1,9 @@
 #include "Server.h"
-#include "NewMessage.h"
-#include "CloseMessage.h"
 #include "Client.h"
-#include "ClienListener.h"
 #include "ClientDatabase.h"
+#include "ClientListener.h"
+#include "CloseMessage.h"
+#include "NewMessage.h"
 #include <asio/error.hpp>
 
 Server::ptr Server::create(asio::io_context &context) {
@@ -99,14 +99,16 @@ void Server::handleConenctionClose() { socket.close(); }
 
 void Server::scheduleRead() { scheduleReadId(); }
 
-void Server::registerClient(std::uint32_t id, std::weak_ptr<Client> client){
+void Server::registerClient(std::uint32_t id, std::weak_ptr<Client> client,
+                            std::uint32_t port) {
   ClientDatabase::getDefault().registerClient(id, client);
   NewMessage clientAddedMessage;
+  clientAddedMessage.setPort(port);
   clientAddedMessage.setId(id);
   write(clientAddedMessage);
 }
 
-void Server::removeClient(std::uint32_t id){
+void Server::removeClient(std::uint32_t id) {
   ClientDatabase::getDefault().removeClient(id);
   CloseMessage clientCloseMessage;
   clientCloseMessage.setId(id);
