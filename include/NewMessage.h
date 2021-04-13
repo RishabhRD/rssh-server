@@ -9,4 +9,6 @@ class NewMessage : public Message{
     template <typename Iter> void fillData(Iter begin, Iter end) = delete;
     void operator=(const Message& msg);
     void operator=(Message&& msg);
+    void setPort(std::uint32_t port);
+    std::uint32_t getPort() const noexcept;
 };
