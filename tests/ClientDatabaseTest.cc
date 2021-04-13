@@ -21,3 +21,31 @@ tc("After removing registered client, asking for it would throw exception"){
   database.removeClient(client);
   reqThrows(database.getClientFromId(1));
 }
+
+tc("Once registered client with a ID, idBeingUsed should return true for that"){
+  ClientDatabase database;
+  asio::io_context context;
+  Server::ptr server = Server::create(context);
+  auto client = Client::create(context, server, 1);
+  database.registerClient(client);
+  req(database.isIDBeingUsed(1) == true);
+}
+
+tc("Client registered with a ID and after remvoe should return false"){
+  ClientDatabase database;
+  asio::io_context context;
+  Server::ptr server = Server::create(context);
+  auto client = Client::create(context, server, 1);
+  database.registerClient(client);
+  database.removeClient(client);
+  req(database.isIDBeingUsed(1) == false);
+}
+
+tc("Registering a client with preRegisteredId should throw exception"){
+  ClientDatabase database;
+  asio::io_context context;
+  Server::ptr server = Server::create(context);
+  auto client = Client::create(context, server, 1);
+  database.registerClient(client);
+  reqThrows(database.registerClient(client));
+}
