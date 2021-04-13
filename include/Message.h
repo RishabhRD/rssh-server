@@ -1,3 +1,4 @@
+#pragma once
 #include "MessageParsingException.h"
 #include "MessageType.h"
 #include <algorithm>

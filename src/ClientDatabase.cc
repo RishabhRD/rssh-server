@@ -3,10 +3,10 @@
 ClientDatabase::ClientDatabase(){
 };
 
-void ClientDatabase::registerClient(std::weak_ptr<Client> client){
+void ClientDatabase::registerClient(std::uint32_t id, std::weak_ptr<Client> client){
 }
 
-void ClientDatabase::removeClient(std::weak_ptr<Client> client){
+void ClientDatabase::removeClient(std::uint32_t id){
 }
 
 std::weak_ptr<Client> ClientDatabase::getClientFromId(std::uint32_t id) const{

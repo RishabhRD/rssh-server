@@ -3,6 +3,7 @@
 #include <asio.hpp>
 #include <memory>
 
+class Client;
 using asio::ip::tcp;
 
 class Server : public std::enable_shared_from_this<Server> {
@@ -19,6 +20,8 @@ public:
   tcp::socket &getSocket();
   void scheduleRead();
   void write(const Message &msg) const;
+  void registerClient(std::uint32_t id, std::weak_ptr<Client>);
+  void removeClient(std::uint32_t id);
 
 private:
   Server(asio::io_context &context);
@@ -32,5 +35,5 @@ private:
   void handleReadType(std::error_code code, std::size_t readSize);
   void handleReadLength(std::error_code code, std::size_t readSize);
   void handleReadData(std::error_code code, std::size_t readSize);
-  void sendMessageToClient(const Message& msg);
+  void sendMessageToClient(const Message &msg);
 };
