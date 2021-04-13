@@ -6,8 +6,6 @@
 IDAllocator::IDAllocator() : id(0){
 }
 
-IDAllocator &IDAllocator::getDefault() { return defaultAllocator; }
-
 std::uint32_t IDAllocator::allocate() {
   if(deallocatedList.size() > 0){
     auto answer = deallocatedList.back();

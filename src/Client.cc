@@ -1,13 +1,13 @@
 #include "Client.h"
 #include <asio.hpp>
 
-Client::Client(asio::io_context &context, Server::ptr server, int id)
+Client::Client(asio::io_context &context, Server::ptr server, int id, IDAllocator& allocator)
     : context(context), socket(context), server(server), id(id),
-      readBuffer(1024) {}
+      readBuffer(1024), allocator(allocator) {}
 
 Client::ptr Client::create(asio::io_context &context, Server::ptr server,
-                           int id) {
-  return ptr(new Client(context, server, id));
+                           int id, IDAllocator& allocaotor) {
+  return ptr(new Client(context, server, id, allocaotor));
 }
 
 void Client::write(const Message &msg) const {
@@ -25,7 +25,7 @@ void Client::scheduleRead() {
       [this](auto error, auto size) { handleRead(error, size); });
 }
 
-void Client::handleRead(std::error_code error, std::size_t readSize){
+void Client::handleRead(std::error_code error, std::size_t readSize) {
   if (error == asio::error::eof) {
     handleConenctionClose();
     return;
@@ -37,4 +37,6 @@ void Client::handleRead(std::error_code error, std::size_t readSize){
   scheduleRead();
 }
 
-void Client::handleConenctionClose() { socket.close(); }
+void Client::handleConenctionClose() { socket.close(); 
+  server->removeClient(id);
+}

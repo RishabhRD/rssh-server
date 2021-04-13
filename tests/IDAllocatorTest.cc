@@ -30,13 +30,6 @@ tc("Deallocating a non-allocated id should throw exception"){
   REQUIRE_THROWS(allocator.deallocate(2));
 }
 
-tc("Default allocator is same instance everywhere"){
-  auto& allocator = IDAllocator::getDefault();
-  req(allocator.allocate() == 0);
-  allocator = IDAllocator::getDefault();
-  req(allocator.allocate() == 1);
-}
-
 tc("Should throw exception on allocating after limit"){
   IDAllocator allocator;
   for(std::uint32_t i = 0; i < UINT32_MAX; i++){

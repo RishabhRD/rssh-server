@@ -9,6 +9,7 @@ class ClientListener : public std::enable_shared_from_this<ClientListener> {
   tcp::acceptor acceptor;
   Server::ptr server;
   int listeningPort;
+  IDAllocator allocator;
 
 public:
   typedef std::shared_ptr<ClientListener> ptr;
