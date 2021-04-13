@@ -21,6 +21,16 @@ void ClientListener::startListening() {
 
 void ClientListener::onNewClientAdded(Client::ptr newClient,
                                       const std::error_code &error) {
-  server->registerClient(newClient->getId(), newClient);
-  newClient->start();
+  if (!error) {
+    server->registerClient(newClient->getId(), newClient);
+    newClient->start();
+  }
+  startListening();
+}
+
+void ClientListener::close() { acceptor.close(); }
+
+ClientListener::ptr ClientListener::create(asio::io_context &context,
+                                           Server::ptr server) {
+  return ptr(new ClientListener(context, server));
 }
