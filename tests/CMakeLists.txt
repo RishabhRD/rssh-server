@@ -1,5 +1,6 @@
 enable_testing()
 add_executable(unit_test
+  ../src/MessageType.cc
   ../src/ListenerMessage.cc
   ../src/ClientDatabase.cc
   ClientDatabaseTest.cc

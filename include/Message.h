@@ -41,7 +41,7 @@ public:
     uint8_t mt;
     std::memcpy(&mt, rawPtr + current, sizeof(std::uint8_t));
     current += sizeof(std::uint8_t);
-    MessageType messageType = Message::getMessageTypeFromInt(mt);
+    MessageType messageType = convertIntegerToMessageType(mt);
     msg.setType(messageType);
     std::memcpy(&msg.length, rawPtr + current, sizeof(std::uint32_t));
     current += sizeof(std::uint32_t);
@@ -56,7 +56,4 @@ public:
     return msg;
   }
 
-private:
-  std::uint8_t getIntegerMessageType() const noexcept;
-  static MessageType getMessageTypeFromInt(std::uint8_t mt);
 };

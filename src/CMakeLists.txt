@@ -1,4 +1,5 @@
 add_executable(rssh-server
+  MessageType.cc
   ListenerMessage.cc
   ClientDatabase.cc
   Server.cc
