@@ -1,4 +1,5 @@
 #pragma once
+#include "ClientDatabase.h"
 #include <Message.h>
 #include <asio.hpp>
 #include <memory>
@@ -13,6 +14,7 @@ class Server : public std::enable_shared_from_this<Server> {
   std::uint32_t id;
   std::uint8_t type;
   std::uint32_t length;
+  ClientDatabase clientDB;
 
 public:
   typedef std::shared_ptr<Server> ptr;
