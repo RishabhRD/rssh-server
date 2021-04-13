@@ -99,11 +99,9 @@ void Server::handleConenctionClose() { socket.close(); }
 
 void Server::scheduleRead() { scheduleReadId(); }
 
-void Server::registerClient(std::uint32_t id, std::weak_ptr<Client> client,
-                            std::uint32_t port) {
+void Server::registerClient(std::uint32_t id, std::weak_ptr<Client> client) {
   ClientDatabase::getDefault().registerClient(id, client);
   NewMessage clientAddedMessage;
-  clientAddedMessage.setPort(port);
   clientAddedMessage.setId(id);
   write(clientAddedMessage);
 }

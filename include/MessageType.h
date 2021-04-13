@@ -3,7 +3,8 @@
 enum class MessageType{
   DATA,
   NEW,
-  CLOSE
+  CLOSE,
+  LISTEN
 };
 
 std::uint8_t convertMessageTypeToInteger(MessageType type);

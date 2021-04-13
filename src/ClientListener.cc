@@ -1,5 +1,26 @@
 #include "ClientListener.h"
+#include "Client.h"
+#include "ListenerMessage.h"
 
 ClientListener::ClientListener(asio::io_context &context, Server::ptr server)
     : context(context), acceptor(context, tcp::endpoint(tcp::v4(), 0)),
-      server(server) {}
+      server(server), listeningPort(acceptor.local_endpoint().port()) {
+  ListenerMessage listeningMessage;
+  listeningMessage.setPort(listeningPort);
+  server->write(listeningMessage);
+}
+
+void ClientListener::startListening() {
+  std::uint32_t id = IDAllocator::getDefault().allocate();
+  Client::ptr newClient = Client::create(context, server, id);
+  acceptor.async_accept(newClient->getSocket(),
+                        [this, newClient, id](auto error) {
+                          onNewClientConnection(newClient, error);
+                        });
+}
+
+void ClientListener::onNewClientAdded(Client::ptr newClient,
+                                      const std::error_code &error) {
+  server->registerClient(newClient->getId(), newClient);
+  newClient->start();
+}
