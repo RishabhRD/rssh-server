@@ -51,7 +51,7 @@ void Server::handleReadType(std::error_code code, std::size_t readSize) {
 }
 
 void Server::scheduleReadLength() {
-  asio::async_read(socket, asio::buffer(&type, sizeof(type)),
+  asio::async_read(socket, asio::buffer(&length, sizeof(length)),
                    [this](auto errorCode, auto readSize) {
                      handleReadLength(errorCode, readSize);
                    });

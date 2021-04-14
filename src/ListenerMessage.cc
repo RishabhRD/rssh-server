@@ -3,7 +3,8 @@
 #include <stdexcept>
 
 ListenerMessage::ListenerMessage() : Message(MessageType::LISTEN) {
-  data.reserve(sizeof(std::uint32_t));
+  data.resize(sizeof(std::uint32_t));
+  length = sizeof(std::uint32_t);
 }
 
 ListenerMessage::ListenerMessage(Message &&msg) : Message(MessageType::LISTEN) {
@@ -19,13 +20,13 @@ ListenerMessage::ListenerMessage(Message &&msg) : Message(MessageType::LISTEN) {
         "Invalid casting of message with length "
         "!= sizeof(std::uint32_t) to ListenerMessage");
   }
-  id = std::move(msg.getId());
+  id = msg.getId();
   if (id > 0) {
     throw InvalidMessageCastException(
         "Invalid message casting to listen: id > 0 discovered");
   }
-  type = std::move(msg.getType());
-  length = std::move(msg.getLength());
+  type = msg.getType();
+  length = msg.getLength();
   data = msg.getData();
   if (getPort() > 65535) {
     throw InvalidMessageCastException("Invalid message casting to listen "
@@ -54,6 +55,9 @@ ListenerMessage::ListenerMessage(const Message &msg)
   }
   type = msg.getType();
   length = msg.getLength();
+  if(length != sizeof(std::uint32_t)){
+    throw InvalidMessageCastException("Invalid listening message cast with size != 4");
+  }
   data = msg.getData();
   if (getPort() > 65535) {
     throw InvalidMessageCastException("Invalid message casting to listen "
@@ -101,13 +105,13 @@ void ListenerMessage::operator=(Message &&msg) {
         "Invalid casting of message with length "
         "!= sizeof(std::uint32_t) to ListenerMessage");
   }
-  id = std::move(msg.getId());
+  id = msg.getId();
   if (id > 0) {
     throw InvalidMessageCastException(
         "Invalid message casting to listen: id > 0 discovered");
   }
-  type = std::move(msg.getType());
-  length = std::move(msg.getLength());
+  type = msg.getType();
+  length = msg.getLength();
   data = msg.getData();
   if (getPort() > 65535) {
     throw InvalidMessageCastException("Invalid message casting to listen "

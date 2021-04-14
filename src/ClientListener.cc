@@ -1,3 +1,4 @@
+#include <iostream>
 #include "ClientListener.h"
 #include "Client.h"
 #include "ListenerMessage.h"
@@ -25,7 +26,7 @@ void ClientListener::onNewClientAdded(Client::ptr newClient,
     server->registerClient(newClient->getId(), newClient);
     newClient->scheduleRead();
   }
-  startListening();
+  /* startListening(); */
 }
 
 void ClientListener::close() { acceptor.close(); }
