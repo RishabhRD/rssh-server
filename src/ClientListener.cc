@@ -1,7 +1,8 @@
-#include <iostream>
 #include "ClientListener.h"
 #include "Client.h"
 #include "ListenerMessage.h"
+#include <functional>
+#include <iostream>
 
 ClientListener::ClientListener(asio::io_context &context, Server::ptr server)
     : context(context), acceptor(context, tcp::endpoint(tcp::v4(), 0)),
@@ -14,10 +15,10 @@ ClientListener::ClientListener(asio::io_context &context, Server::ptr server)
 void ClientListener::startListening() {
   std::uint32_t id = allocator.allocate();
   Client::ptr newClient = Client::create(context, server, id, allocator);
-  acceptor.async_accept(newClient->getSocket(),
-                        [this, newClient, id](auto error) {
-                          onNewClientAdded(newClient, error);
-                        });
+  auto acceptFp =
+      std::bind(&ClientListener::onNewClientAdded, shared_from_this(),
+                newClient, std::placeholders::_1);
+  acceptor.async_accept(newClient->getSocket(), acceptFp);
 }
 
 void ClientListener::onNewClientAdded(Client::ptr newClient,
@@ -26,7 +27,7 @@ void ClientListener::onNewClientAdded(Client::ptr newClient,
     server->registerClient(newClient->getId(), newClient);
     newClient->scheduleRead();
   }
-  /* startListening(); */
+  startListening();
 }
 
 void ClientListener::close() { acceptor.close(); }

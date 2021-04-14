@@ -1,15 +1,21 @@
-#include <asio.hpp>
 #include "Server.h"
+#include <asio.hpp>
+#include <memory>
 
 using asio::ip::tcp;
 
-class ServerListener{
-  asio::io_context& context;
+class ServerListener : public std::enable_shared_from_this<ServerListener> {
+  asio::io_context &context;
   tcp::acceptor acceptor;
-  public:
-  ServerListener(asio::io_context& context, int port);
-  void startListening() ;
+
+public:
+  typedef std::shared_ptr<ServerListener> ptr;
+  void startListening();
   void close();
-  private:
-  void onNewServerConnection(Server::ptr newServer, const std::error_code& error);
+  static ptr create(asio::io_context& context, int port);
+
+private:
+  void onNewServerConnection(Server::ptr newServer,
+                             const std::error_code &error);
+  ServerListener(asio::io_context &context, int port);
 };

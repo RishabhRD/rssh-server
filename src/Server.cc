@@ -4,6 +4,8 @@
 #include "CloseMessage.h"
 #include "NewMessage.h"
 #include <asio/error.hpp>
+#include <functional>
+#include <iostream>
 
 Server::ptr Server::create(asio::io_context &context) {
   return ptr(new Server(context));
@@ -21,10 +23,9 @@ void Server::write(const Message &msg) {
 }
 
 void Server::scheduleReadId() {
-  asio::async_read(socket, asio::buffer(&id, sizeof(id)),
-                   [this](auto errorCode, auto readSize) {
-                     handleReadId(errorCode, readSize);
-                   });
+  auto handleReadFp = std::bind(&Server::handleReadId, shared_from_this(),
+                                std::placeholders::_1, std::placeholders::_2);
+  asio::async_read(socket, asio::buffer(&id, sizeof(id)), handleReadFp);
 }
 
 void Server::handleReadId(std::error_code code, std::size_t readSize) {
@@ -36,10 +37,9 @@ void Server::handleReadId(std::error_code code, std::size_t readSize) {
 }
 
 void Server::scheduleReadType() {
-  asio::async_read(socket, asio::buffer(&type, sizeof(type)),
-                   [this](auto errorCode, auto readSize) {
-                     handleReadType(errorCode, readSize);
-                   });
+  auto handleReadFp = std::bind(&Server::handleReadType, shared_from_this(),
+                                std::placeholders::_1, std::placeholders::_2);
+  asio::async_read(socket, asio::buffer(&type, sizeof(type)), handleReadFp);
 }
 
 void Server::handleReadType(std::error_code code, std::size_t readSize) {
@@ -51,10 +51,9 @@ void Server::handleReadType(std::error_code code, std::size_t readSize) {
 }
 
 void Server::scheduleReadLength() {
-  asio::async_read(socket, asio::buffer(&length, sizeof(length)),
-                   [this](auto errorCode, auto readSize) {
-                     handleReadLength(errorCode, readSize);
-                   });
+  auto handleReadFp = std::bind(&Server::handleReadLength, shared_from_this(),
+                                std::placeholders::_1, std::placeholders::_2);
+  asio::async_read(socket, asio::buffer(&length, sizeof(length)), handleReadFp);
 }
 
 void Server::handleReadLength(std::error_code code, std::size_t readSize) {
@@ -66,14 +65,16 @@ void Server::handleReadLength(std::error_code code, std::size_t readSize) {
     if (msg.getType() == MessageType::CLOSE) {
       handleConenctionClose();
       return;
+    } else {
+      scheduleReadId();
     }
   }
 }
 
 void Server::scheduleReadData() {
-  asio::async_read(
-      socket, asio::buffer(readBuffer, length),
-      [this](auto error, auto size) { handleReadData(error, size); });
+  auto handleReadFp = std::bind(&Server::handleReadData, shared_from_this(),
+                                std::placeholders::_1, std::placeholders::_2);
+  asio::async_read(socket, asio::buffer(readBuffer, length), handleReadFp);
 }
 
 void Server::handleReadData(std::error_code code, std::size_t readSize) {
@@ -93,7 +94,9 @@ void Server::sendMessageToClient(const Message &msg) {
   client->write(msg);
 }
 
-void Server::handleConenctionClose() { socket.close(); }
+void Server::handleConenctionClose() {
+  socket.close();
+}
 
 void Server::scheduleRead() { scheduleReadId(); }
 

@@ -21,9 +21,9 @@ std::uint32_t Client::getId() const noexcept { return id; }
 tcp::socket &Client::getSocket() noexcept { return socket; }
 
 void Client::scheduleRead() {
-  socket.async_read_some(
-      asio::buffer(readBuffer),
-      [this](auto error, auto size) { handleRead(error, size); });
+  auto readFp = std::bind(&Client::handleRead, shared_from_this(),
+                          std::placeholders::_1, std::placeholders::_2);
+  socket.async_read_some(asio::buffer(readBuffer), readFp);
 }
 
 void Client::handleRead(std::error_code error, std::size_t readSize) {
