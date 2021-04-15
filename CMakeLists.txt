@@ -5,7 +5,7 @@ find_package(Threads REQUIRED)
 find_package(Catch2 REQUIRED)
 
 add_subdirectory(src)
-# if(BUILD_TESTING)
-add_subdirectory(tests)
-# endif()
+if(BUILD_TESTS)
+  add_subdirectory(tests)
+endif()
 
