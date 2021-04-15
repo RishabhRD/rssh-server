@@ -62,7 +62,9 @@ void Server::handleReadLength(std::error_code code, std::size_t readSize) {
     Message msg(convertIntegerToMessageType(type));
     msg.setId(id);
     if (msg.getType() == MessageType::CLOSE) {
+      // TODO: handle client disconnection
       handleConenctionClose();
+      scheduleReadId();
       return;
     } else {
       scheduleReadId();
@@ -94,7 +96,8 @@ void Server::sendMessageToClient(const Message &msg) {
 }
 
 void Server::handleConenctionClose() {
-  socket.close();
+  std::cout<<"Closing from server"<<std::endl;
+  /* socket.cancel(); */
 }
 
 void Server::scheduleRead() { scheduleReadId(); }
