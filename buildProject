@@ -1,2 +1,2 @@
-cmake -B build -S .
+cmake -DBUILD_TESTS=OFF -B build -S .
 cmake --build build
