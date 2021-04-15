@@ -18,8 +18,7 @@ tcp::socket &Server::getSocket() { return socket; }
 
 void Server::write(const Message &msg) {
   auto data = msg.serialize();
-  // TODO: decide if anything should be done on write
-  asio::async_write(socket, asio::buffer(data), [](auto error, auto size) {});
+  asio::write(socket, asio::buffer(data));
 }
 
 void Server::scheduleReadId() {
