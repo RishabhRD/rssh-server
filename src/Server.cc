@@ -97,7 +97,6 @@ void Server::sendMessageToClient(const Message &msg) {
 
 void Server::handleConenctionClose() {
   std::cout<<"Closing from server"<<std::endl;
-  /* socket.cancel(); */
 }
 
 void Server::scheduleRead() { scheduleReadId(); }

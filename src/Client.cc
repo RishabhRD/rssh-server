@@ -41,6 +41,5 @@ void Client::handleRead(std::error_code error, std::size_t readSize) {
 
 void Client::handleConenctionClose() {
   std::cout<<"Closing from client"<<std::endl;
-  /* socket.cancel(); */
   server->removeClient(id);
 }
