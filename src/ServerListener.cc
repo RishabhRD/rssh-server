@@ -21,9 +21,9 @@ void ServerListener::close() {
 void ServerListener::onNewServerConnection(Server::ptr newServer,
                                            const std::error_code &error) {
   if (!error) {
-    newServer->scheduleRead();
     auto newClientListener =
         ClientListener::create(context, newServer->shared_from_this());
+    newServer->scheduleRead(newClientListener);
     newClientListener->startListening();
   }
   startListening();

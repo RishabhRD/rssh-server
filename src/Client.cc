@@ -1,6 +1,6 @@
-#include <iostream>
 #include "Client.h"
 #include <asio.hpp>
+#include <iostream>
 
 Client::Client(asio::io_context &context, Server::ptr server, int id,
                IDAllocator &allocator)
@@ -14,7 +14,10 @@ Client::ptr Client::create(asio::io_context &context, Server::ptr server,
 
 void Client::write(const Message &msg) {
   auto data = msg.getData();
-  asio::write(socket, asio::buffer(data));
+  try {
+    asio::write(socket, asio::buffer(data));
+  } catch (...) {
+  }
 }
 
 std::uint32_t Client::getId() const noexcept { return id; }
@@ -39,7 +42,6 @@ void Client::handleRead(std::error_code error, std::size_t readSize) {
   scheduleRead();
 }
 
-void Client::handleConenctionClose() {
-  std::cout<<"Closing from client"<<std::endl;
-  server->removeClient(id);
-}
+void Client::handleConenctionClose() { server->removeClient(id); }
+
+void Client::close() { socket.close(); }

@@ -1,3 +1,4 @@
+#include "Client.h"
 #include "ClientDatabase.h"
 #include <stdexcept>
 
@@ -31,4 +32,12 @@ std::weak_ptr<Client> ClientDatabase::getClientFromId(std::uint32_t id) const {
 
 bool ClientDatabase::isIDBeingUsed(std::uint32_t id) const noexcept {
   return mp.find(id) != mp.end();
+}
+
+void ClientDatabase::removeAll(){
+  for(auto& keyValuePair : mp){
+    auto client = keyValuePair.second.lock();
+    client->close();
+  }
+  mp.clear();
 }

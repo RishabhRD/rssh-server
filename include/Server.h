@@ -4,6 +4,7 @@
 #include <asio.hpp>
 #include <memory>
 
+class ClientListener;
 class Client;
 using asio::ip::tcp;
 
@@ -14,13 +15,14 @@ class Server : public std::enable_shared_from_this<Server> {
   std::uint32_t id;
   std::uint8_t type;
   std::uint32_t length;
+  std::weak_ptr<ClientListener> listener;
   ClientDatabase clientDB;
 
 public:
   typedef std::shared_ptr<Server> ptr;
   static ptr create(asio::io_context &context);
   tcp::socket &getSocket();
-  void scheduleRead();
+  void scheduleRead(std::weak_ptr<ClientListener> listener);
   void write(const Message &msg) ;
   void registerClient(std::uint32_t id, std::weak_ptr<Client>);
   void removeClient(std::uint32_t id);

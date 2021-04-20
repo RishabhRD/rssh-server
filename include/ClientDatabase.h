@@ -11,4 +11,5 @@ class ClientDatabase{
     void removeClient(std::uint32_t id);
     std::weak_ptr<Client> getClientFromId(std::uint32_t id) const;
     bool isIDBeingUsed(std::uint32_t id) const noexcept;
+    void removeAll();
 };

@@ -20,6 +20,7 @@ public:
   std::uint32_t getId() const noexcept;
   void scheduleRead();
   void write(const Message& msg);
+  void close();
 private:
   Client(asio::io_context& context, Server::ptr server, int id, IDAllocator& allocator);
   void handleRead(std::error_code error, std::size_t readSize);

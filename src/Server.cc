@@ -18,7 +18,10 @@ tcp::socket &Server::getSocket() { return socket; }
 
 void Server::write(const Message &msg) {
   auto data = msg.serialize();
-  asio::write(socket, asio::buffer(data));
+  try {
+    asio::write(socket, asio::buffer(data));
+  } catch (...) {
+  }
 }
 
 void Server::scheduleReadId() {
@@ -96,10 +99,14 @@ void Server::sendMessageToClient(const Message &msg) {
 }
 
 void Server::handleConenctionClose() {
-  std::cout<<"Closing from server"<<std::endl;
+  clientDB.removeAll();
+  listener.lock()->close();
 }
 
-void Server::scheduleRead() { scheduleReadId(); }
+void Server::scheduleRead(std::weak_ptr<ClientListener> listener) {
+  this->listener = listener;
+  scheduleReadId();
+}
 
 void Server::registerClient(std::uint32_t id, std::weak_ptr<Client> client) {
   clientDB.registerClient(id, client);
